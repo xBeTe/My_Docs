@@ -47,7 +47,15 @@ module.exports = [
               '/front-end/Vue/Vue2',
               '/front-end/Vue/Vue3快速上手',
             ]
+          },
+          {
+            title: 'VuePress',
+            collapsable: true,
+            children: [
+              '/front-end/VuePress/VuePress项目部署',
+            ]
           }
+
         ]
     }
 ]
