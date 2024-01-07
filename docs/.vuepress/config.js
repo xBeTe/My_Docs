@@ -1,6 +1,4 @@
 const sidebar = require('./config/sidebar')
-const moment = require('moment');
-
 
 module.exports = {
   title: "XzXie's docs",
@@ -10,8 +8,20 @@ module.exports = {
       'link', {rel: 'icon', href: '/favicon.ico'}
     ]
   ],
+  plugins: [
+    [
+      '@vuepress/last-updated',
+      {
+        transformer: (timestamp) => {
+          const moment = require('moment')
+          moment.locale("zh-cn")
+          return moment(timestamp).fromNow()
+        }
+      }
+    ],
+  ],
   themeConfig: {
-    lastUpdated: '更新时间于：',
+    lastUpdated: '更新时间',
     logo: '/assets/img/logo.png',
     nav: [
       {text: '主页', link: '/'},
@@ -32,21 +42,6 @@ module.exports = {
     ],
     sidebar,
 
-    plugins: [
-      'vuepress-plugin-permalink-pinyin',
-      '@vuepress/last-updated',
-      {
-        transformer: (timestamp) => {
-          moment.locale("zh-cn")
-          return moment(timestamp).format('LLLL')
-        }
-      }
-    ]
+
   },
-  markdown: {
-    // ......
-    extendMarkdown: md => {
-      md.use(require("markdown-it-disable-url-encode"));
-    }
-  }
 }

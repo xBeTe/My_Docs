@@ -1,7 +1,6 @@
 {
   "devDependencies": {
-    "vuepress": "^1.9.10",
-    "vuepress-plugin-permalink-pinyin": "^1.1.0"
+    "vuepress": "^1.9.10"
   },
   "name": "My_Docs",
   "version": "1.0.0",
@@ -16,7 +15,6 @@
     "deploy": "bash deploy.sh"
   },
   "dependencies": {
-    "markdown-it-disable-url-encode": "^1.0.1",
     "moment": "^2.30.1"
   }
 }
