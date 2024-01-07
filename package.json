@@ -1,0 +1,22 @@
+{
+  "devDependencies": {
+    "vuepress": "^1.9.10",
+    "vuepress-plugin-permalink-pinyin": "^1.1.0"
+  },
+  "name": "My_Docs",
+  "version": "1.0.0",
+  "description": "Integrate various documents in your own learning process",
+  "main": "index.js",
+  "repository": "https://github.com/xBeTe/My_Docs.git",
+  "author": "Xz Xie",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vuepress dev docs --temp .temp",
+    "build": "vuepress build docs",
+    "deploy": "bash deploy.sh"
+  },
+  "dependencies": {
+    "markdown-it-disable-url-encode": "^1.0.1",
+    "moment": "^2.30.1"
+  }
+}

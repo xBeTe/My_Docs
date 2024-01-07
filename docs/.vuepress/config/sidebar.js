@@ -27,6 +27,9 @@ module.exports = [
             children: [
               '/blockchain/Fabric/1_部署 Fabric 生产网络',
               '/blockchain/Fabric/2_部署 orderer 节点',
+              '/blockchain/Fabric/3_部署 peer 节点',
+              '/blockchain/Fabric/4_Docker 方式多机部署生产网络',
+              '/blockchain/Fabric/Faric 数字版权应用',
             ]
           }
         ]

@@ -1,5 +1,11 @@
 # 搭建 Fabric 生产网络
 
+相关链接：
+
+- [Fabric 文档](https://hyperledger-fabric.readthedocs.io/en/release-2.5/deployment_guide_overview.html)
+- [Fabric 中文文档](https://hyperledger-fabric.readthedocs.io/zh-cn/release-2.5/deployment_guide_overview.html)
+- [学习教程（For Java SDK）](https://www.bilibili.com/video/BV1ZR4y1M7yH)
+
 > 准备工作：[下载 fabric 发行版](https://github.com/hyperledger/fabric/releases) （示例版本 v2.4.4），并解压。
 
 ## 生成网络需要的身份文件
