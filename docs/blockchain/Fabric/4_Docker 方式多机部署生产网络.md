@@ -1,5 +1,82 @@
 # 使用 Docker 部署生产网络 
 
+## 日志上限设置
+
+在单机环境上部署生产网络，每个节点所在的容器每时每刻都在产生日志，短时间内很容易占用 10 G  + 的空间
+
+### docker 日志清理
+
+```bash
+vim docker-log-clear.sh
+```
+
+写入：
+
+```shell
+#!/bin/bash
+echo "======== start clean docker containers logs ========"
+logs=$(find /var/lib/docker/containers/ -name *-json.log)
+for log in $logs
+        do
+                echo "clean logs : $log"
+                cat /dev/null > $log
+        done
+echo "======== end clean docker containers logs ========"
+```
+
+保存，退出
+
+```bash
+# 给脚本添加可执行权
+chmod +x docker-log-clear.sh
+
+# 执行脚本
+docker-log-clear.sh
+```
+
+### 容器单独日志上限
+
+在 `docker-compose.yaml` 中可以设置每个容器的日志上限：
+
+```yaml
+nginx: 
+  image: nginx:1.12.1 
+  restart: always 
+  logging: 
+    driver: “json-file” 
+    options: 
+      max-size: “500m” 
+```
+
+### 全局设置
+
+新建/etc/docker/daemon.json，若有就不用新建了。
+
+```bash
+vim /etc/docker/daemon.json
+```
+
+添加log-dirver和log-opts参数，样例如下：
+
+```json
+{
+  ...,
+  "log-driver":"json-file",
+  "log-opts": {"max-size":"500m", "max-file":"3"}
+}
+```
+
+`max-size=500m`，意味着一个容器日志大小上限是500M，
+`max-file=3`，意味着一个容器有三个日志，分别是id+.json、id+1.json、id+2.json。
+
+```bash
+# 重启docker守护进程
+
+systemctl daemon-reload
+
+systemctl restart docker
+```
+
 ## 规划网络拓扑
 
 3 个 orderer 节点；组织 org1 , org1 下有两个 peer 节点， peer0 和 peer1; 组织 org2 , org2 下有两个 peer 节点， peer0 和 peer1;
@@ -490,7 +567,6 @@ export CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/crypto-config/peerOrg
 export CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
 export CORE_PEER_ADDRESS=peer1.org1.example.com:8051
 
-
 peer channel join -b /tmp/channel-artifacts/businesschannel.block
 ```
 
@@ -517,3 +593,31 @@ export CORE_PEER_ADDRESS=peer1.org2.example.com:10051
 
 peer channel join -b /tmp/channel-artifacts/businesschannel.block
 ```
+
+## 更新锚节点
+
+org1 更新锚节点：
+
+```bash
+export CORE_PEER_TLS_ENABLED=true
+export CORE_PEER_LOCALMSPID="Org1MSP"
+export CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+export CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+export CORE_PEER_ADDRESS=peer0.org1.example.com:7051
+
+peer channel update -o orderer0.example.com:7050 -c businesschannel -f /tmp/channel-artifacts/Org1MSPanchors.tx --tls --cafile /etc/hyperledger/fabric/crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
+```
+
+org2 更新锚节点：
+
+```bash
+export CORE_PEER_TLS_ENABLED=true
+export CORE_PEER_LOCALMSPID="Org2MSP"
+export CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt
+export CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp
+export CORE_PEER_ADDRESS=peer0.org2.example.com:9051
+
+peer channel update -o orderer0.example.com:7050 -c businesschannel -f /tmp/channel-artifacts/Org2MSPanchors.tx --tls --cafile /etc/hyperledger/fabric/crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
+```
+
+锚节点配置更新后，同一通道内不同组织之间的 Peer 也可以进行 Gossip 通信，共同维护通道账本。后续，用户可以通过智能合约使用通道账本。

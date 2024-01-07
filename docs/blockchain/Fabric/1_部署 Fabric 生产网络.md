@@ -4,13 +4,14 @@
 
 - [Fabric 文档](https://hyperledger-fabric.readthedocs.io/en/release-2.5/deployment_guide_overview.html)
 - [Fabric 中文文档](https://hyperledger-fabric.readthedocs.io/zh-cn/release-2.5/deployment_guide_overview.html)
-- [学习教程（For Java SDK）](https://www.bilibili.com/video/BV1ZR4y1M7yH)
+
+> 文档来源于B 站[视频教程（For Java SDK）](https://www.bilibili.com/video/BV1ZR4y1M7yH)，UP 主[博客主页](https://my.oschina.net/j4love)
 
 > 准备工作：[下载 fabric 发行版](https://github.com/hyperledger/fabric/releases) （示例版本 v2.4.4），并解压。
 
-## 生成网络需要的身份文件
+# 生成网络需要的身份文件
 
-### 规划网络拓扑
+## 规划网络拓扑
 
 3 个 orderer 节点；组织 org1 , org1 下有两个 peer 节点， peer0 和 peer1; 组织 org2 , org2 下有两个 peer 节点， peer0 和 peer1
 
@@ -20,7 +21,7 @@
 
 > Fabric 项目还提供了 `cryptogen` 工具来在本地生身份文件，这种方式需要提供一个 `crypto-config.yaml` 配置文件。
 
-#### 准备 `crypto-config.yaml` 文件
+### 准备 `crypto-config.yaml` 文件
 
 在解压后的`bin/`目录下，使用命令：
 
@@ -276,7 +277,7 @@ PeerOrgs:
 
 ```
 
-#### 生成组织身份文件
+### 生成组织身份文件
 
 根据 `crypto-config.yaml` 配置文件生成组织身份文件并保存在 ` ../crypto-config` 目录下。
 
@@ -541,7 +542,7 @@ PeerOrgs:
 125 directories, 117 files
 ```
 
-### 生成系统通道初始区块
+## 生成系统通道初始区块
 
 > 可以使用 `configtxgen` 工具生成，生成过程依赖 `config` 目录下的`configtx.yaml` 配置文件，`configtx.yaml` 配置文件定义了整个网络中的相关配置和拓扑结构信息 。
 

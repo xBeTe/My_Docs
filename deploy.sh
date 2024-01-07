@@ -19,6 +19,9 @@ git commit -m 'deploy'
 # 如果发布到 https://<USERNAME>.github.io
 git push -f git@github.com:xBeTe/xBeTe.github.io.git master
 
+# 发布到云服务器
+git push -f --set-upstream git@xzxie.me:/home/git/docs.git master
+
 # 如果发布到 https://<USERNAME>.github.io/<REPO>
 #git push -f git@github.com:xBeTe/My_Docs.git master:gh-pages
 

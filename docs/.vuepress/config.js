@@ -36,6 +36,7 @@ module.exports = {
       {
         text: '前端', items: [
           {text: 'Vue', link: '/front-end/Vue/Vue2'},
+          {text: 'VuePress', link: '/front-end/VuePress/VuePress项目部署'},
         ]
       },
       {text: 'Github', link: 'https://github.com/xBeTe'},
